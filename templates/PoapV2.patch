@@ -1,0 +1,143 @@
+509c509
+<     bool private _initialized;
+---
+>     bool private initialized;
+514c514
+<     bool private _initializing;
+---
+>     bool private initializing;
+520c520
+<         // If the contract is initializing we ignore whether _initialized is set in order to support multiple
+---
+>         // If the contract is initializing we ignore whether initialized is set in order to support multiple
+523c523
+<         require(_initializing ? _isConstructor() : !_initialized, "Initializable: contract is already initialized");
+---
+>         require(initializing ? _isConstructor() : !initialized, "Initializable: contract is already initialized");
+525c525
+<         bool isTopLevelCall = !_initializing;
+---
+>         bool isTopLevelCall = !initializing;
+527,528c527,528
+<             _initializing = true;
+<             _initialized = true;
+---
+>             initializing = true;
+>             initialized = true;
+534c534
+<             _initializing = false;
+---
+>             initializing = false;
+543c543
+<         require(_initializing, "Initializable: contract is not initializing");
+---
+>         require(initializing, "Initializable: contract is not initializing");
+549a550
+>     uint256[50] private ______gap;
+583d583
+<     uint256[50] private __gap;
+691c691,692
+<     uint256[50] private __gap;
+---
+>     mapping(bytes4 => bool) private _supportedInterfaces; // Added for backward compatibility, no longer used
+>     uint256[50] private ______gap;
+713c714,715
+< contract ERC721Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradeable, IERC721Upgradeable, IERC721MetadataUpgradeable {
+---
+> abstract contract ERC721Upgradeable is Initializable, ContextUpgradeable, ERC165Upgradeable, IERC721Upgradeable, IERC721MetadataUpgradeable {
+>     using CountersUpgradeable for CountersUpgradeable.Counter;
+717,722d718
+<     // Token name
+<     string private _name;
+< 
+<     // Token symbol
+<     string private _symbol;
+< 
+724,727c720
+<     mapping(uint256 => address) private _owners;
+< 
+<     // Mapping owner address to token count
+<     mapping(address => uint256) private _balances;
+---
+>     mapping(uint256 => address) private _tokenOwner;
+731a725,727
+>     // Mapping owner address to token count
+>     mapping(address => CountersUpgradeable.Counter) private _ownedTokensCount;
+> 
+745,746d740
+<         _name = name_;
+<         _symbol = symbol_;
+764c758
+<         return _balances[owner];
+---
+>         return _ownedTokensCount[owner].current();
+771c765
+<         address owner = _owners[tokenId];
+---
+>         address owner = _tokenOwner[tokenId];
+777,809d770
+<      * @dev See {IERC721Metadata-name}.
+<      */
+<     function name() public view virtual override returns (string memory) {
+<         return _name;
+<     }
+< 
+<     /**
+<      * @dev See {IERC721Metadata-symbol}.
+<      */
+<     function symbol() public view virtual override returns (string memory) {
+<         return _symbol;
+<     }
+< 
+<     /**
+<      * @dev See {IERC721Metadata-tokenURI}.
+<      */
+<     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+<         require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
+< 
+<         string memory baseURI = _baseURI();
+<         return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, tokenId.toString())) : "";
+<     }
+< 
+<     /**
+<      * @dev Base URI for computing {tokenURI}. If set, the resulting URI for each
+<      * token will be the concatenation of the `baseURI` and the `tokenId`. Empty
+<      * by default, can be overriden in child contracts.
+<      */
+<     function _baseURI() internal view virtual returns (string memory) {
+<         return "";
+<     }
+< 
+<     /**
+922c883
+<         return _owners[tokenId] != address(0);
+---
+>         return _tokenOwner[tokenId] != address(0);
+986,987c947,948
+<         _balances[to] += 1;
+<         _owners[tokenId] = to;
+---
+>         _ownedTokensCount[to].increment();
+>         _tokenOwner[tokenId] = to;
+1010,1011c971,972
+<         _balances[owner] -= 1;
+<         delete _owners[tokenId];
+---
+>         _ownedTokensCount[owner].decrement();
+>         delete _tokenOwner[tokenId];
+1040,1042c1001,1003
+<         _balances[from] -= 1;
+<         _balances[to] += 1;
+<         _owners[tokenId] = to;
+---
+>         _ownedTokensCount[from].decrement();
+>         _ownedTokensCount[to].increment();
+>         _tokenOwner[tokenId] = to;
+1124c1085
+<     uint256[44] private __gap;
+---
+>     uint256[50] private ______gap;
+1328c1289
+<     uint256[46] private __gap;
+---
+>     uint256[50] private ______gap;
