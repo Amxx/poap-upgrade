@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "prepare": "scripts/prepare.sh",
     "compile": "hardhat compile",
     "test": "hardhat test"
   },

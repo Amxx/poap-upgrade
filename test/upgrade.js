@@ -1,8 +1,6 @@
 const { upgrades } = require('hardhat');
 
-async function main() {
-    // const [ admin ] = await ethers.getSigners();
-
+it('storage layout consistency', async function () {
     const proxy = await ethers.getContractFactory('Poap').then(factory => upgrades.deployProxy(
         factory,
         [ "Poap", "POAP", "somebase/", [] ],
@@ -14,11 +12,4 @@ async function main() {
         factory,
         {},
     ));
-}
-
-main()
-    .then(() => process.exit(0))
-    .catch(error => {
-        console.error(error);
-        process.exit(1);
-    });
+});
